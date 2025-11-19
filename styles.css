@@ -449,3 +449,33 @@ body.party-mode .skill-tag {
         align-items: center;
     }
 }
+
+/* === OVERRIDES FOR LINKED PROJECT CARDS === */
+/* Needed because we wrapped cards in <a> tags which changes browser default styling */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.project-card-link {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: block;
+}
+
+.project-card-link:hover,
+.project-card-link:visited,
+.project-card-link:active,
+.project-card-link:focus {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+/* Enforce colors from the original design even when inside a link */
+.project-card-link h3 {
+    color: var(--text-color) !important;
+}
+
+.project-card-link p {
+    color: var(--text-muted) !important;
+}
