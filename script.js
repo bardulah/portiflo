@@ -125,11 +125,6 @@ class ParticleSystem {
     }
 }
 
-// Initialize particle system
-const canvas = document.getElementById('particle-canvas');
-const particleSystem = new ParticleSystem(canvas);
-particleSystem.animate();
-
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -163,17 +158,23 @@ window.addEventListener('scroll', () => {
 // Party Mode Toggle
 const partyBtn = document.getElementById('party-btn');
 let isPartyMode = false;
+let particleSystem = null;
 
 partyBtn.addEventListener('click', () => {
     isPartyMode = !isPartyMode;
     document.body.classList.toggle('party-mode');
-    particleSystem.togglePartyMode();
+
+    if (particleSystem) {
+        particleSystem.togglePartyMode();
+    }
 
     if (isPartyMode) {
         partyBtn.textContent = '🎊 Party On!';
+        partyBtn.setAttribute('aria-pressed', 'true');
         createConfetti();
     } else {
         partyBtn.textContent = '🎉 Party Mode';
+        partyBtn.setAttribute('aria-pressed', 'false');
     }
 });
 
@@ -268,7 +269,14 @@ document.addEventListener('keydown', (e) => {
 
     if (konamiCode.join(',') === konamiSequence.join(',')) {
         document.body.classList.add('party-mode');
-        particleSystem.togglePartyMode();
+        isPartyMode = true;
+        partyBtn.textContent = '🎊 Party On!';
+        partyBtn.setAttribute('aria-pressed', 'true');
+
+        if (particleSystem) {
+            particleSystem.togglePartyMode();
+        }
+
         createConfetti();
 
         // Create a fun alert
@@ -297,6 +305,148 @@ document.addEventListener('keydown', (e) => {
         konamiCode = [];
     }
 });
+
+// Contact Form Validation and Handling
+const contactForm = document.getElementById('contact-form');
+const formStatus = document.querySelector('.form-status');
+
+if (contactForm) {
+    // Form validation
+    const validators = {
+        name: (value) => {
+            if (!value.trim()) return 'Name is required';
+            if (value.trim().length < 2) return 'Name must be at least 2 characters';
+            return null;
+        },
+        email: (value) => {
+            if (!value.trim()) return 'Email is required';
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) return 'Please enter a valid email address';
+            return null;
+        },
+        subject: (value) => {
+            if (!value.trim()) return 'Subject is required';
+            if (value.trim().length < 3) return 'Subject must be at least 3 characters';
+            return null;
+        },
+        message: (value) => {
+            if (!value.trim()) return 'Message is required';
+            if (value.trim().length < 10) return 'Message must be at least 10 characters';
+            return null;
+        }
+    };
+
+    // Real-time validation
+    Object.keys(validators).forEach(fieldName => {
+        const field = document.getElementById(fieldName);
+        const errorElement = document.getElementById(`${fieldName}-error`);
+
+        if (field && errorElement) {
+            field.addEventListener('blur', () => {
+                const error = validators[fieldName](field.value);
+                if (error) {
+                    field.classList.add('error');
+                    errorElement.textContent = error;
+                } else {
+                    field.classList.remove('error');
+                    errorElement.textContent = '';
+                }
+            });
+
+            field.addEventListener('input', () => {
+                if (field.classList.contains('error')) {
+                    const error = validators[fieldName](field.value);
+                    if (!error) {
+                        field.classList.remove('error');
+                        errorElement.textContent = '';
+                    }
+                }
+            });
+        }
+    });
+
+    // Form submission
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Validate all fields
+        let isValid = true;
+        const formData = {};
+
+        Object.keys(validators).forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            const errorElement = document.getElementById(`${fieldName}-error`);
+            const error = validators[fieldName](field.value);
+
+            if (error) {
+                isValid = false;
+                field.classList.add('error');
+                errorElement.textContent = error;
+            } else {
+                field.classList.remove('error');
+                errorElement.textContent = '';
+                formData[fieldName] = field.value.trim();
+            }
+        });
+
+        if (!isValid) {
+            formStatus.className = 'form-status error';
+            formStatus.textContent = 'Please fix the errors above';
+            return;
+        }
+
+        // Show loading state
+        const submitBtn = contactForm.querySelector('.submit-btn');
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+        formStatus.className = 'form-status';
+        formStatus.style.display = 'none';
+
+        try {
+            // Simulate form submission (replace with actual API call)
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            // For now, just log to console and show success
+            // In production, you'd send this to your backend/API
+            console.log('Form submitted:', formData);
+
+            // Show success message
+            formStatus.className = 'form-status success';
+            formStatus.textContent = 'Message sent successfully! I\'ll get back to you soon.';
+
+            // Reset form
+            contactForm.reset();
+
+            // Clear any error states
+            Object.keys(validators).forEach(fieldName => {
+                const field = document.getElementById(fieldName);
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                field.classList.remove('error');
+                errorElement.textContent = '';
+            });
+
+        } catch (error) {
+            console.error('Form submission error:', error);
+            formStatus.className = 'form-status error';
+            formStatus.textContent = 'Oops! Something went wrong. Please try again or email me directly.';
+        } finally {
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
+        }
+    });
+}
+
+// Error handling for particle system
+try {
+    const canvas = document.getElementById('particle-canvas');
+    if (canvas && canvas.getContext) {
+        particleSystem = new ParticleSystem(canvas);
+        particleSystem.animate();
+    }
+} catch (error) {
+    console.warn('Particle system initialization failed:', error);
+    // Gracefully degrade - site still works without particles
+}
 
 console.log('%c🎉 Welcome to Portiflo! 🎉', 'font-size: 20px; font-weight: bold; color: #6366f1;');
 console.log('%cTry the Konami Code for a surprise! ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️BA', 'font-size: 14px; color: #ec4899;');

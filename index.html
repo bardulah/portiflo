@@ -3,32 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
     <title>Portiflo - Your Creative Portfolio</title>
+    <meta name="description" content="Creative Developer & Designer portfolio showcasing web development projects, interactive experiences, and modern design.">
+    <meta name="keywords" content="web developer, portfolio, creative developer, web design, JavaScript, React">
+    <meta name="author" content="Your Name">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/">
+    <meta property="og:title" content="Portiflo - Your Creative Portfolio">
+    <meta property="og:description" content="Creative Developer & Designer portfolio showcasing web development projects and interactive experiences.">
+    <meta property="og:image" content="https://yourdomain.com/preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://yourdomain.com/">
+    <meta name="twitter:title" content="Portiflo - Your Creative Portfolio">
+    <meta name="twitter:description" content="Creative Developer & Designer portfolio showcasing web development projects.">
+    <meta name="twitter:image" content="https://yourdomain.com/preview.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles.css" as="style">
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#6366f1">
 </head>
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Particle Background Canvas -->
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
             <h1 class="logo">Portiflo</h1>
-            <ul class="nav-menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><button id="party-btn" class="party-button">🎉 Party Mode</button></li>
+            <ul class="nav-menu" role="list">
+                <li><a href="#home" aria-label="Go to home section">Home</a></li>
+                <li><a href="#about" aria-label="Go to about section">About</a></li>
+                <li><a href="#projects" aria-label="Go to projects section">Projects</a></li>
+                <li><a href="#contact" aria-label="Go to contact section">Contact</a></li>
+                <li><button id="party-btn" class="party-button" aria-label="Toggle party mode animations" aria-pressed="false">🎉 Party Mode</button></li>
             </ul>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
+    <main id="main-content">
+    <section id="home" class="hero" aria-labelledby="hero-title">
         <div class="hero-content">
-            <h1 class="hero-title">
-                <span class="wave">👋</span>
+            <h1 id="hero-title" class="hero-title">
+                <span class="wave" aria-hidden="true">👋</span>
                 Hi, I'm <span class="highlight">Your Name</span>
             </h1>
             <p class="hero-subtitle">Creative Developer & Designer</p>
@@ -143,30 +175,94 @@
         <div class="container">
             <h2 class="section-title">Let's Connect</h2>
             <p class="contact-subtitle">Have a project in mind? Let's make it happen!</p>
+
+            <!-- Contact Form -->
+            <form id="contact-form" class="contact-form" novalidate>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            required
+                            aria-required="true"
+                            autocomplete="name"
+                            placeholder="Your name"
+                        >
+                        <span class="error-message" id="name-error" role="alert"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            aria-required="true"
+                            autocomplete="email"
+                            placeholder="your@email.com"
+                        >
+                        <span class="error-message" id="email-error" role="alert"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <input
+                        type="text"
+                        id="subject"
+                        name="subject"
+                        required
+                        aria-required="true"
+                        placeholder="What's this about?"
+                    >
+                    <span class="error-message" id="subject-error" role="alert"></span>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea
+                        id="message"
+                        name="message"
+                        rows="5"
+                        required
+                        aria-required="true"
+                        placeholder="Tell me about your project..."
+                    ></textarea>
+                    <span class="error-message" id="message-error" role="alert"></span>
+                </div>
+                <button type="submit" class="btn btn-primary submit-btn">
+                    <span class="btn-text">Send Message</span>
+                    <span class="btn-loader" aria-hidden="true"></span>
+                </button>
+                <div class="form-status" role="status" aria-live="polite"></div>
+            </form>
+
+            <!-- Social Links -->
             <div class="contact-links">
-                <a href="mailto:your.email@example.com" class="contact-link">
-                    <span class="icon">📧</span>
+                <a href="mailto:your.email@example.com" class="contact-link" aria-label="Email me">
+                    <span class="icon" aria-hidden="true">📧</span>
                     <span>Email Me</span>
                 </a>
-                <a href="https://github.com/yourusername" class="contact-link">
-                    <span class="icon">🐙</span>
+                <a href="https://github.com/yourusername" class="contact-link" target="_blank" rel="noopener noreferrer" aria-label="Visit my GitHub profile">
+                    <span class="icon" aria-hidden="true">🐙</span>
                     <span>GitHub</span>
                 </a>
-                <a href="https://linkedin.com/in/yourprofile" class="contact-link">
-                    <span class="icon">💼</span>
+                <a href="https://linkedin.com/in/yourprofile" class="contact-link" target="_blank" rel="noopener noreferrer" aria-label="Connect on LinkedIn">
+                    <span class="icon" aria-hidden="true">💼</span>
                     <span>LinkedIn</span>
                 </a>
-                <a href="https://twitter.com/yourhandle" class="contact-link">
-                    <span class="icon">🐦</span>
+                <a href="https://twitter.com/yourhandle" class="contact-link" target="_blank" rel="noopener noreferrer" aria-label="Follow me on Twitter">
+                    <span class="icon" aria-hidden="true">🐦</span>
                     <span>Twitter</span>
                 </a>
             </div>
         </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2025 Portiflo. Made with ❤️ and lots of coffee.</p>
+        <p>&copy; 2025 Portiflo. Made with <span aria-label="love">❤️</span> and lots of coffee.</p>
     </footer>
 
     <script src="script.js"></script>
